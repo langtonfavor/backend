@@ -52,21 +52,22 @@ public class UserController : ControllerBase
     }
 
     private string GenerateJwtToken(User user)
+{
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsMyLongSecretKeyForJwtTokenGenerationThatIhaveForNowUseIt")); // Updated secret key
+
+    var tokenDescriptor = new SecurityTokenDescriptor
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(jwtSecret);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
+        Subject = new ClaimsIdentity(new[]
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
-            }),
-            Expires = DateTime.UtcNow.AddMinutes(jwtExpirationMinutes),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
+            new Claim(ClaimTypes.Name, user.Id.ToString())
+        }),
+        Expires = DateTime.UtcNow.AddMinutes(jwtExpirationMinutes),
+        SigningCredentials = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256Signature) // Updated with signinKey
+    };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
+    var token = tokenHandler.CreateToken(tokenDescriptor);
+    return tokenHandler.WriteToken(token);
+}
+
 }

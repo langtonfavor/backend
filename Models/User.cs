@@ -7,7 +7,7 @@ namespace backend.Models
     {
         public int Id { get; set; }
 
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Required]
         [EmailAddress]
