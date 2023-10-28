@@ -72,6 +72,13 @@ else
     app.UseHsts();
 }
 
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+    options.WithOrigins("http://localhost:3000"); // Replace with your React frontend URL
+});
+
 app.UseHttpsRedirection();
 app.UseRouting(); // Add routing middleware
 
