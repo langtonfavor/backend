@@ -10,14 +10,15 @@ namespace backend.Services
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Show> Shows { get; set; } 
+        public DbSet<UserPreferences> UserPreferences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Username);
-                    //.IsRequired(false); // This allows null values for Username
-                // Other property configurations...
             });
         }
     }

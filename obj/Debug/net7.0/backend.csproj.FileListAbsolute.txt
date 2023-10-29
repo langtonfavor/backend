@@ -76,3 +76,4 @@ C:\Users\User\Desktop\assesment\tv-show-tracker\backend\obj\Debug\net7.0\refint\
 C:\Users\User\Desktop\assesment\tv-show-tracker\backend\obj\Debug\net7.0\backend.pdb
 C:\Users\User\Desktop\assesment\tv-show-tracker\backend\obj\Debug\net7.0\backend.genruntimeconfig.cache
 C:\Users\User\Desktop\assesment\tv-show-tracker\backend\obj\Debug\net7.0\ref\backend.dll
+C:\Users\User\Desktop\assesment\tv-show-tracker\backend\bin\Debug\net7.0\Newtonsoft.Json.dll
