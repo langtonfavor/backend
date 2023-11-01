@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\assesment\\tv-show-tracker\\backend\\backend.csproj": {}
+    "C:\\Users\\Simone\\Desktop\\code\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\assesment\\tv-show-tracker\\backend\\backend.csproj": {
+    "C:\\Users\\Simone\\Desktop\\code\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\assesment\\tv-show-tracker\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\Simone\\Desktop\\code\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\User\\Desktop\\assesment\\tv-show-tracker\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\assesment\\tv-show-tracker\\backend\\obj\\",
+        "projectPath": "C:\\Users\\Simone\\Desktop\\code\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\Simone\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Simone\\Desktop\\code\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Simone\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -72,6 +70,14 @@
               "target": "Package",
               "version": "[7.0.13, )"
             },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.69, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
@@ -79,6 +85,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[7.0.3, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
             }
           },
           "imports": [

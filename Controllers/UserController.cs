@@ -8,66 +8,97 @@ using backend.Models;
 using backend.Services;
 using BCrypt.Net;
 
-namespace backend.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class UserController : ControllerBase
+namespace backend.Controllers
 {
-    private readonly IUserService userService;
-    private readonly string jwtSecret = "mysecurekey"; 
-    private readonly int jwtExpirationMinutes = 60;
-
-    public UserController(IUserService userService)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        this.userService = userService;
-    }
+        private readonly IUserService userService;
+        private readonly string jwtSecret = "mysecurekey";
+        private readonly int jwtExpirationMinutes = 60;
+        private readonly AppDbContext context;
+        private readonly IUserRepository userRepository;
 
-    [HttpPost("register")]
-    public IActionResult Register([FromBody] User model)
-    {
-        var user = userService.Register(model);
-
-        if (user == null)
+        public UserController(IUserService userService, AppDbContext context, IUserRepository userRepository)
         {
-            return BadRequest("Registration failed.");
+            this.userService = userService;
+            this.context = context;
+            this.userRepository = userRepository;
         }
 
-        return Ok("Registration successful");
-    }
-
-    [HttpPost("login")]
-    public IActionResult Login([FromBody] User model)
-    {
-        var user = userService.Login(model);
-
-        if (user == null)
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] User model)
         {
-            return Unauthorized("Invalid email or password.");
+            var user = userService.Register(model);
+
+            if (user == null)
+            {
+                return BadRequest("Registration failed.");
+            }
+
+            return Ok("Registration successful");
         }
 
-        var token = GenerateJwtToken(user);
-
-        return Ok(new { token });
-    }
-
-    private string GenerateJwtToken(User user)
-{
-    var tokenHandler = new JwtSecurityTokenHandler();
-    var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsMyLongSecretKeyForJwtTokenGenerationThatIhaveForNowUseIt")); // Updated secret key
-
-    var tokenDescriptor = new SecurityTokenDescriptor
-    {
-        Subject = new ClaimsIdentity(new[]
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] User model)
         {
-            new Claim(ClaimTypes.Name, user.Id.ToString())
-        }),
-        Expires = DateTime.UtcNow.AddMinutes(jwtExpirationMinutes),
-        SigningCredentials = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256Signature) // Updated with signinKey
-    };
+            var user = userService.Login(model);
 
-    var token = tokenHandler.CreateToken(tokenDescriptor);
-    return tokenHandler.WriteToken(token);
-}
+            if (user == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
 
+            var token = GenerateJwtToken(user);
+
+            return Ok(new { token });
+        }
+
+        [HttpPut("userpreferences/{userEmail}")]
+        public IActionResult UpdateUserPreferences(string userEmail, [FromBody] UserPreference updatedPreference)
+        {
+            var user = userRepository.GetUserByEmail(userEmail);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var userPreferences = context.UserPreferences.FirstOrDefault(up => up.UserId == user.Id);
+
+            if (userPreferences == null)
+            {
+                return NotFound("User preferences not found");
+            }
+
+            userPreferences.ShowMovies = updatedPreference.ShowMovies;
+            userPreferences.ShowTVShows = updatedPreference.ShowTVShows;
+
+            context.SaveChanges();
+
+            return Ok("User preferences updated successfully");
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsMyLongSecretKeyForJwtTokenGenerationThatIhaveForNowUseIt"));
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Username),
+                    new Claim(ClaimTypes.Email, user.Email),
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(jwtExpirationMinutes),
+                SigningCredentials = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+    }
 }
