@@ -1,4 +1,6 @@
-public class Episode
+namespace backend.Models
+{
+    public class Episode
 {
     public int Id { get; set; }
     public int ShowId { get; set; } 
@@ -6,3 +8,5 @@ public class Episode
     public int SeasonNumber { get; set; }
     public int EpisodeNumber { get; set; }
 }
+}
+
